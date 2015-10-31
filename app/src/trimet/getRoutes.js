@@ -17,9 +17,9 @@ function getRoutes() {
     return new Promise( function ( resolve, reject ) {
         request.get( url, {}, function ( error, response, body ) {
             if ( response.statusCode === 200 ) {
-                resolve( body );
+                resolve( JSON.parse( body ) );
             } else {
-                reject( body )
+                reject( body );
             }
         } )
     } );

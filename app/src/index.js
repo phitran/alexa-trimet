@@ -26,11 +26,11 @@ function LambdaFimction( event, context ) {
             }, 2000 );
 
             function success( response ) {
-                console.log( 'lambda', response );
+                console.log( response );
             }
 
             function fail( reason ) {
-                console.log( 'lambda', reason );
+                context.fail( reason );
             }
         }
 

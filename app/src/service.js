@@ -17,11 +17,12 @@ function getRoutes() {
             trimet.getRoutes().then( success, fail );
 
             function success( response ) {
-                cache.setRoutesCache( response );
-                resolve( response );
+                cache.setRoutesCache( response.resultSet );
+                resolve( response.resultSet );
             }
 
             function fail( reason ) {
+                console.error( new Error( reason ) );
                 reject( reason );
             }
         } else {
