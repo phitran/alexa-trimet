@@ -1,5 +1,5 @@
 var _get = require( 'lodash/object/get' ),
-    trimet = require( './trimet' ),
+    service = require( './service' ),
     helper = require( './helper.js' );
 
 function LambdaFimction( event, context ) {
@@ -20,13 +20,18 @@ function LambdaFimction( event, context ) {
             var speachResponse = helper.buildSpeechletResponse();
             var response = helper.buildResponse( {}, speachResponse );
 
-            //trimet.getVehicleLocations( function( data ) {
-            //    context.succeed( response );
-            //} );
 
-            trimet.getRoutes( function( data ) {
+            setTimeout( function() {
+                service.getRoutes().then( success, fail );
+            }, 2000 );
 
-            } );
+            function success( response ) {
+                console.log( 'lambda', response );
+            }
+
+            function fail( reason ) {
+                console.log( 'lambda', reason );
+            }
         }
 
         if ( requestType === 'SessionEndedRequest' ) {

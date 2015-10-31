@@ -12,11 +12,13 @@
   "author": "Phi Tran",
   "license": "ISC",
   "devDependencies": {
-    "gulp": "^3.9.0"
+    "del": "^2.0.2",
+    "gulp": "^3.9.0",
+    "gulp-zip": "^3.0.2"
   },
   "dependencies": {
-    "dynamoDB": "^0.1.4",
     "lodash": "^3.10.1",
+    "node-cache": "^3.0.0",
     "request": "^2.65.0"
   }
 }

@@ -1,7 +1,7 @@
 var gulp = require( 'gulp' ),
     zip = require( 'gulp-zip' ),
     del = require( 'del' ),
-    lambdaFunction = require( './app/index.js' );
+    lambdaFunction = require( './app/src/index.js' );
 
 var event = {
         "session": {
@@ -49,7 +49,7 @@ gulp.task( 'run', function () {
 } );
 
 gulp.task( 'zip', function () {
-    gulp.src( 'app/*' )
+    gulp.src( 'app/src/*' )
         .pipe( zip( 'lamda.zip' ) )
         .pipe( gulp.dest( 'dist' ) );
 } );
@@ -59,7 +59,7 @@ gulp.task( 'clean', function () {
 } );
 
 gulp.task( 'watch', function () {
-    gulp.watch( [ 'app/**/*.js' ], [ 'run' ] );
+    gulp.watch( [ 'app/src/**/*.js' ], [ 'run' ] );
 } );
 
 gulp.task( 'default', [ 'watch', 'run' ] );
