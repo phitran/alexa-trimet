@@ -18,9 +18,9 @@ function getRoutes() {
 function getVehicleLocations() {
     var baseUrl = 'https://developer.trimet.org/ws/v2/vehicles',
         parameters = {
-            routes: 'fpp',
-            blocks: 'fp',
-            ids: 'foo'
+            //routes: 'fpp',
+            //blocks: 'fp',
+            //ids: 'foo'
         };
 
     return helper.getRequest( baseUrl, parameters );

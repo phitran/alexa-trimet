@@ -1,17 +1,16 @@
 var nodeCache = new require( "node-cache" ),
-    cacheOptions = { stdTTL: 100, checkperiod: 120 };
+    cacheOptions = { stdTTL: 100, checkperiod: 120 },
+    trimetCache = new nodeCache( cacheOptions );
 
-var routesCache = new nodeCache( cacheOptions );
-
-function setRoutesCache( data ) {
-    routesCache.set( "routes", data );
+function setCache( type, data ) {
+    trimetCache.set( type, data );
 }
 
-function getRoutesCache() {
-    return routesCache.get( 'routes' )
+function getCache( type ) {
+    return trimetCache.get( type )
 }
 
 module.exports = {
-    setRoutesCache: setRoutesCache,
-    getRoutesCache: getRoutesCache
+    setCache: setCache,
+    getCache: getCache
 };
