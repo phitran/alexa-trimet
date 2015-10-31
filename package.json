@@ -1,0 +1,22 @@
+{
+  "name": "alexa-trimet",
+  "version": "0.0.1",
+  "description": "Amazon Alexa Skill for Trimet schedule",
+  "main": "./app/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "trimet"
+  ],
+  "author": "Phi Tran",
+  "license": "ISC",
+  "devDependencies": {
+    "gulp": "^3.9.0"
+  },
+  "dependencies": {
+    "dynamoDB": "^0.1.4",
+    "lodash": "^3.10.1",
+    "request": "^2.65.0"
+  }
+}

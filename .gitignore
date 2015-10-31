@@ -1,0 +1,14 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+node_modules
+dist
+.idea/*
+!.idea/codeStyleSettings.xml
+!.idea/concierge.iml
