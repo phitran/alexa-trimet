@@ -1,4 +1,5 @@
-var _forOwn = require( 'lodash/object/forown' ),
+var request = require( 'request' ),
+    _forOwn = require( 'lodash/object/forown' ),
     _merge = require( 'lodash/object/merge' );
 
 function buildRequestURL( baseUrl, paramsObject ) {
@@ -13,4 +14,18 @@ function buildRequestURL( baseUrl, paramsObject ) {
     return url + params.join( '&' );
 }
 
-module.exports.buildRequestURL = buildRequestURL;
+function getRequest( basaeUrl, paramsObject ) {
+    var url = buildRequestURL( basaeUrl, paramsObject );
+
+    return new Promise( function ( resolve, reject ) {
+        request.get( url, {}, function ( error, response, body ) {
+            if ( response.statusCode === 200 ) {
+                resolve( JSON.parse( body ) );
+            } else {
+                reject( body );
+            }
+        } )
+    } );
+}
+
+module.exports.getRequest = getRequest;

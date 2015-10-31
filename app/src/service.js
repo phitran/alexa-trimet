@@ -1,5 +1,6 @@
 var cache = require( './cache' ),
-    trimet = require( './trimet' );
+    trimet = require( './trimet' ),
+    _sortBy = require( 'lodash/collection/sortBy' );
 
 init();
 
@@ -17,8 +18,10 @@ function getRoutes() {
             trimet.getRoutes().then( success, fail );
 
             function success( response ) {
-                cache.setRoutesCache( response.resultSet );
-                resolve( response.resultSet );
+                var cacheData = { route: _sortBy( response.resultSet.route, 'route' ) };
+
+                cache.setRoutesCache( cacheData );
+                resolve( cacheData );
             }
 
             function fail( reason ) {
