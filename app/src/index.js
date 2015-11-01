@@ -1,4 +1,5 @@
 var _get = require( 'lodash/object/get' ),
+    _filter = require( 'lodash/collection/filter' ),
     service = require( './service' ),
     helper = require( './helper.js' );
 
@@ -16,17 +17,22 @@ function LambdaFimction( event, context ) {
         if ( requestType === 'IntentRequest' ) {
             //console.log( event.request );
             //console.log( event.session );
+            //console.log( _get( event, 'session.user.userId' ) );
 
-            var speachResponse = helper.buildSpeechletResponse();
-            var response = helper.buildResponse( {}, speachResponse );
+            //setTimeout( function () {
+            //    service.getRoutes().then( success, fail );
+            //    //service.getVehicleLocations().then( success, fail );
+            //}, 2000 );
 
-
-            setTimeout( function() {
-                service.getRoutes().then( success, fail );
-            }, 2000 );
+            service.getRoutes().then( success, fail );
 
             function success( response ) {
-                console.log( response );
+                //console.log( response );
+
+                var speachResponse = helper.buildSpeechletResponse( 'Trimet Test', 'This is a test, ' + _get( event, 'request.intent.name' ), null, true );
+                var response = helper.buildResponse( {}, speachResponse );
+
+                context.succeed( response );
             }
 
             function fail( reason ) {
@@ -44,3 +50,5 @@ function LambdaFimction( event, context ) {
 }
 
 exports.handler = LambdaFimction;
+
+

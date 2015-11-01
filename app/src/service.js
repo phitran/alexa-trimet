@@ -1,5 +1,5 @@
-var cache = require( './cache' ),
-    trimet = require( './trimet' ),
+var cacheService = require( './cache' ),
+    trimetService = require( './trimet' ),
     _sortBy = require( 'lodash/collection/sortBy' );
 
 init();
@@ -12,17 +12,18 @@ function init() {
 
 function getRoutes() {
     var cacheType = 'routes',
-        data = cache.getCache( cacheType );
+        data = cacheService.getCache( cacheType );
 
     return new Promise( function ( resolve, reject ) {
         if ( !data ) {
-            // get routes from service
-            trimet.getRoutes().then( success, fail );
+            // get trimet routes from service
+            trimetService.getRoutes().then( success, fail );
 
             function success( response ) {
+                console.info( 'Populating cache with Trimet Routes' );
                 var cacheData = { route: _sortBy( response.resultSet.route, 'route' ) };
 
-                cache.setCache( cacheType, cacheData );
+                cacheService.setCache( cacheType, cacheData );
                 resolve( cacheData );
             }
 
@@ -32,24 +33,26 @@ function getRoutes() {
             }
         } else {
             // return routes from cache
-            resolve( cache.getCache( cacheType ) );
+            console.info( 'Retrieving Trimet Routes from cache' );
+            resolve( cacheService.getCache( cacheType ) );
         }
     } );
 }
 
 function getVehicleLocations() {
     var cacheType = 'vehicleLocations',
-        data = cache.getCache( cacheType );
+        data = cacheService.getCache( cacheType );
 
     return new Promise( function ( resolve, reject ) {
         if ( !data ) {
-            // get routes from service
-            trimet.getVehicleLocations().then( success, fail );
+            // get vehicle infomation from service
+            trimetService.getVehicleLocations().then( success, fail );
 
             function success( response ) {
+                console.info( 'Populating cache with Trimet Vehicle information' );
                 var cacheData = { vehicle: _sortBy( response.resultSet.vehicle, 'vehicle' ) };
 
-                cache.setCache( cacheType, cacheData );
+                cacheService.setCache( cacheType, cacheData );
                 resolve( cacheData );
             }
 
@@ -58,8 +61,9 @@ function getVehicleLocations() {
                 reject( reason );
             }
         } else {
-            // return routes from cache
-            resolve( cache.getCache( cacheType ) );
+            // return vehicle infomation from cache
+            console.info( 'Retrieving Trimet Vehicle Infomation from cache' );
+            resolve( cacheService.getCache( cacheType ) );
         }
     } );
 }

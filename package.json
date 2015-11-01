@@ -12,8 +12,9 @@
   "author": "Phi Tran",
   "license": "ISC",
   "devDependencies": {
-    "del": "^2.0.2",
+    "aws-sdk": "^2.2.13",
     "gulp": "^3.9.0",
+    "gulp-clean": "^0.3.1",
     "gulp-zip": "^3.0.2"
   },
   "dependencies": {

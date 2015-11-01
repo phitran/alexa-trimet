@@ -1,33 +1,29 @@
 var gulp = require( 'gulp' ),
     zip = require( 'gulp-zip' ),
-    del = require( 'del' ),
-    lambdaFunction = require( './app/src/index.js' );
+    clean = require( 'gulp-clean' );
 
 var event = {
         "session": {
-            "new": false,
-            "sessionId": "session1234",
-            "attributes": {},
-            "user": {
-                "userId": null
-            },
+            "sessionId": "SessionId.eada5122-2209-451a-930d-88d0fe3db50c",
             "application": {
                 "applicationId": process.env.ALEXA_APP_ID
-            }
-        },
-        "version": "1.0",
-        "request": {
-            "intent": {
-                "slots": {
-                    "Color": {
-                        "name": "Color",
-                        "value": "blue"
-                    }
-                },
-                "name": "MyColorIsIntent"
             },
+            "attributes": null,
+            "user": {
+                "userId": "amzn1.account.AHX66MBOY3PKIUOMYJVX5LYT3DNA",
+                "accessToken": null
+            },
+            "new": true
+        },
+        "request": {
             "type": "IntentRequest",
-            "requestId": "request5678"
+            "requestId": "EdwRequestId.fcf2fe49-1345-457e-8ed3-9ab439f1b2f5",
+            "timestamp": 1446336138472,
+            "intent": {
+                "name": "SetUserLocation",
+                "slots": {}
+            },
+            "reason": null
         }
     },
     context = {
@@ -45,17 +41,20 @@ var event = {
     };
 
 gulp.task( 'run', function () {
-    lambdaFunction.handler( event, context );
+    var lamdaFunction = require( './app/src/index.js' );
+    lamdaFunction.handler( event, context );
+    //process.exit( 0 );
 } );
 
 gulp.task( 'zip', function () {
-    gulp.src( 'app/src/*' )
+    return gulp.src( [ 'app/src/*', 'node_modules' ] )
         .pipe( zip( 'lamda.zip' ) )
-        .pipe( gulp.dest( 'dist' ) );
+        .pipe( gulp.dest( 'dist' ) )
 } );
 
 gulp.task( 'clean', function () {
-    del( [ 'dist' ] );
+    gulp.src( 'dist' )
+        .pipe( clean( { force: true } ) )
 } );
 
 gulp.task( 'watch', function () {
