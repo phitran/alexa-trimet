@@ -1,6 +1,8 @@
 var gulp = require( 'gulp' ),
     zip = require( 'gulp-zip' ),
-    clean = require( 'gulp-clean' );
+    fs = require( "fs" ),
+    del = require( 'del' ),
+    _forOwn = require( 'lodash/object/forOwn' );
 
 var event = {
         "session": {
@@ -40,26 +42,51 @@ var event = {
         }
     };
 
+var appDir = './app/src';
+var buildDir = './dist';
+var dependenciesPaths = [];
+
 gulp.task( 'run', function () {
-    var lamdaFunction = require( './app/src/index.js' );
+    var lamdaFunction = require( appDir + '/index.js' );
     lamdaFunction.handler( event, context );
     //process.exit( 0 );
 } );
 
-gulp.task( 'zip', function () {
-    return gulp.src( [ 'app/src/*', 'node_modules' ] )
-        .pipe( zip( 'lamda.zip' ) )
-        .pipe( gulp.dest( 'dist' ) )
+gulp.task( 'get-modules-paths', [ 'clean' ], function ( cb ) {
+    fs.readFile( "./package.json", "utf-8", function ( err, data ) {
+        var packageJSON = JSON.parse( data );
+
+        _forOwn( packageJSON.dependencies, function ( value, key ) {
+            dependenciesPaths.push( 'node_modules/' + key + '/**' );
+        } );
+
+        cb();
+    } )
+} );
+
+gulp.task( 'copy-modules', [ 'get-modules-paths' ], function () {
+    return gulp.src( dependenciesPaths, { base: 'node_modules' } )
+        .pipe( gulp.dest( buildDir + '/node_modules' ) )
+} );
+
+gulp.task( 'copy-app', [ 'clean' ], function () {
+    return gulp.src( appDir + '/**' )
+        .pipe( gulp.dest( buildDir + '/app' ) )
+} );
+
+gulp.task( 'zip', [ 'copy-app', 'copy-modules' ], function () {
+    return gulp.src( [ buildDir + '/**' ] )
+        .pipe( zip( 'alexa-trimet.zip' ) )
+        .pipe( gulp.dest( buildDir ) )
 } );
 
 gulp.task( 'clean', function () {
-    gulp.src( 'dist' )
-        .pipe( clean( { force: true } ) )
+    return del( [ buildDir ] );
 } );
 
 gulp.task( 'watch', function () {
-    gulp.watch( [ 'app/src/**/*.js' ], [ 'run' ] );
+    gulp.watch( [ appDir + '/**/*.js' ], [ 'run' ] );
 } );
 
 gulp.task( 'default', [ 'watch', 'run' ] );
-gulp.task( 'deploy', [ 'clean', 'zip' ] );
+gulp.task( 'deploy', [ 'clean', 'get-modules-paths', 'copy-modules', 'copy-app', 'zip' ] );
