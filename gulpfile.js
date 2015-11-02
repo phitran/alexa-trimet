@@ -1,4 +1,5 @@
 var gulp = require( 'gulp' ),
+    AWS = require( 'aws-sdk' ),
     zip = require( 'gulp-zip' ),
     fs = require( "fs" ),
     del = require( 'del' ),
@@ -43,7 +44,7 @@ var event = {
     };
 
 var appDir = './app/src';
-var buildDir = './dist';
+var buildDir = './dist/build';
 var dependenciesPaths = [];
 
 gulp.task( 'run', function () {
@@ -71,17 +72,44 @@ gulp.task( 'copy-modules', [ 'get-modules-paths' ], function () {
 
 gulp.task( 'copy-app', [ 'clean' ], function () {
     return gulp.src( appDir + '/**' )
-        .pipe( gulp.dest( buildDir + '/app' ) )
+        .pipe( gulp.dest( buildDir ) )
 } );
 
 gulp.task( 'zip', [ 'copy-app', 'copy-modules' ], function () {
     return gulp.src( [ buildDir + '/**' ] )
         .pipe( zip( 'alexa-trimet.zip' ) )
-        .pipe( gulp.dest( buildDir ) )
+        .pipe( gulp.dest( './dist/' ) )
+} );
+
+gulp.task( 'deploy-lambda', function ( cb ) {
+    var lambda = new AWS.Lambda( {
+        apiVersion: '2015-03-31',
+        region: 'us-east-1',
+        accessKeyId: process.env.AWS_DEPLOY_SECRET,
+        secretAccessKey: process.env.AWS_DEPLOY_KEY
+    } );
+
+
+    fs.readFile( buildDir + '/alexa-trimet.zip', { encoding: 'base64' }, function ( err, file ) {
+
+        var params = {
+            FunctionName: 'AlexaTrimet',
+            Publish: false,
+            S3Bucket: 'alexa-trimet-lambda-deploy',
+            S3Key: 'alexa-trimet.zip',
+            //S3ObjectVersion: 'STRING_VALUE',
+            ZipFile: file
+        };
+
+        lambda.updateFunctionCode( params, function ( err, data ) {
+            console.log( err, data );
+            cb()
+        } );
+    } );
 } );
 
 gulp.task( 'clean', function () {
-    return del( [ buildDir ] );
+    return del( [ './dist/' ] );
 } );
 
 gulp.task( 'watch', function () {
@@ -89,4 +117,4 @@ gulp.task( 'watch', function () {
 } );
 
 gulp.task( 'default', [ 'watch', 'run' ] );
-gulp.task( 'deploy', [ 'clean', 'get-modules-paths', 'copy-modules', 'copy-app', 'zip' ] );
+gulp.task( 'package', [ 'clean', 'get-modules-paths', 'copy-modules', 'copy-app', 'zip' ] );

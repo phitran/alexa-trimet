@@ -1,5 +1,6 @@
-var request = require( 'request' ),
-    _forOwn = require( 'lodash/object/forown' ),
+var Q = require("q" ),
+    request = require( 'request' ),
+    _forOwn = require( 'lodash/object/forOwn' ),
     _merge = require( 'lodash/object/merge' );
 
 function buildRequestURL( baseUrl, paramsObject ) {
@@ -15,17 +16,18 @@ function buildRequestURL( baseUrl, paramsObject ) {
 }
 
 function getRequest( basaeUrl, paramsObject ) {
-    var url = buildRequestURL( basaeUrl, paramsObject );
+    var url = buildRequestURL( basaeUrl, paramsObject ),
+        deferred = Q.defer();
 
-    return new Promise( function ( resolve, reject ) {
-        request.get( url, {}, function ( error, response, body ) {
-            if ( response.statusCode === 200 ) {
-                resolve( JSON.parse( body ) );
-            } else {
-                reject( body );
-            }
-        } )
+    request.get( url, {}, function ( error, response, body ) {
+        if ( response.statusCode === 200 ) {
+            deferred.resolve( JSON.parse( body ) );
+        } else {
+            deferred.reject( body );
+        }
     } );
+
+    return deferred.promise;
 }
 
 module.exports.getRequest = getRequest;

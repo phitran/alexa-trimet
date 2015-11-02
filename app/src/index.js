@@ -3,7 +3,7 @@ var _get = require( 'lodash/object/get' ),
     service = require( './service' ),
     helper = require( './helper.js' );
 
-function LambdaFimction( event, context ) {
+function LambdaFunction( event, context ) {
     try {
         if ( event.session.application.applicationId !== process.env.ALEXA_APP_ID ) {
             context.fail( "Invalid Application ID" );
@@ -49,6 +49,6 @@ function LambdaFimction( event, context ) {
     }
 }
 
-exports.handler = LambdaFimction;
+exports.handler = LambdaFunction;
 
 
