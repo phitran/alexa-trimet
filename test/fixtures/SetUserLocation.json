@@ -2,7 +2,7 @@
   "session": {
     "sessionId": "SessionId.eada5122-2209-451a-930d-88d0fe3db50c",
     "application": {
-      "applicationId": "foo"
+      "applicationId": "dev"
     },
     "attributes": null,
     "user": {
