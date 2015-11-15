@@ -4,7 +4,8 @@ var gulp = require( 'gulp' ),
     replace = require( 'gulp-replace-task' ),
     fs = require( "fs" ),
     del = require( 'del' ),
-    _forOwn = require( 'lodash/object/forOwn' );
+    _forOwn = require( 'lodash/object/forOwn' ),
+    _merge = require( 'lodash/object/merge' );
 
 var appDir = './app/src',
     buildDir = './dist/build',
@@ -40,12 +41,21 @@ gulp.task( 'copy-modules', [ 'get-modules-paths' ], function() {
 
 // replace private values that match gulp.env.[key] & copy app files to dist
 gulp.task( 'copy-app', [ 'clean' ], function() {
+    var gulpEnv = process.env,
+        devEnv = {
+            ALEXA_APP_ID: 'dev'
+        };
+
+    if ( !!process.env.dev ) {
+        _merge( gulpEnv, devEnv );
+    }
+
     return gulp.src( appDir + '/**' )
         .pipe( replace( {
             prefix: 'gulp.env.',
             patterns: [
                 {
-                    json: process.env
+                    json: gulpEnv
                 }
             ]
         } ) )
