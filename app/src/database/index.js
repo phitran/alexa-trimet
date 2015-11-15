@@ -3,8 +3,8 @@ var AWS = require( 'aws-sdk' ),
         apiVersion: '2012-08-10',
         endpoint: 'http://localhost:8000',
         region: 'us-east-1',
-        accessKeyId: process.env.AWS_DYNAMO_SECRET,
-        secretAccessKey: process.env.AWS_DYNAMO_KEY
+        accessKeyId: 'gulp.env.AWS_DYNAMO_SECRET',
+        secretAccessKey: 'gulp.env.AWS_DYNAMO_KEY'
     },
     dynamodb = new AWS.DynamoDB( dynamodbOptions );
 

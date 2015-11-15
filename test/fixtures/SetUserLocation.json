@@ -1,0 +1,24 @@
+{
+  "session": {
+    "sessionId": "SessionId.eada5122-2209-451a-930d-88d0fe3db50c",
+    "application": {
+      "applicationId": "foo"
+    },
+    "attributes": null,
+    "user": {
+      "userId": "amzn1.account.AHX66MBOY3PKIUOMYJVX5LYT3DNA",
+      "accessToken": null
+    },
+    "new": true
+  },
+  "request": {
+    "type": "IntentRequest",
+    "requestId": "EdwRequestId.fcf2fe49-1345-457e-8ed3-9ab439f1b2f5",
+    "timestamp": 1446336138472,
+    "intent": {
+      "name": "SetUserLocation",
+      "slots": {}
+    },
+    "reason": null
+  }
+}

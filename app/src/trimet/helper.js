@@ -7,7 +7,7 @@ function buildRequestURL( baseUrl, paramsObject ) {
     var params = [];
     var url = baseUrl + "?";
 
-    _merge( paramsObject, { appID: process.env.TRIMET_APP_ID } );
+    _merge( paramsObject, { appID: 'gulp.env.TRIMET_APP_ID' } );
     _forOwn( paramsObject, function ( value, key ) {
         params.push( key + '=' + value );
     } );
