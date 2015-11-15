@@ -11,7 +11,7 @@ Amazon Echo Skills app that returns TriMet information
 * ```TRIMET_APP_ID``` - Trimet API key
 * ```AWS_DYNAMO_SECRET``` - AWS Dynamo User access ID
 * ```AWS_DYNAMO_KEY``` - AWS Dynamo User access key
-* ```dev``` - set to ```true``` if dev mode
+* ```IS_DEV``` - set to ```true``` if dev mode
 
 ## Build/Test
 Run ```gulp run``` to mock AWS Lambda request

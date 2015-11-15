@@ -1,14 +1,15 @@
-var _get = require( 'lodash/object/get' ),
+var lodash = require( 'lodash' ),
     service = require( './service' ),
     alexaHelper = require( './alexaHelper.js' );
 
 function LambdaFunction( event, context ) {
     try {
-        if ( event.session.application.applicationId !== 'gulp.env.ALEXA_APP_ID' ) {
+        var appId = lodash.get( event, 'session.application.applicationId' );
+        if ( appId !== 'dev' /* process.env.ALEXA_APP_ID */ ) {
             context.fail( "Invalid Application ID" );
         }
 
-        var requestType = _get( event, 'request.type' );
+        var requestType = lodash.get( event, 'request.type' );
         if ( requestType === 'LaunchRequest' ) {
 
         }
@@ -28,7 +29,7 @@ function LambdaFunction( event, context ) {
             function success( response ) {
                 //console.log( response );
 
-                var speachResponse = alexaHelper.buildSpeechletResponse( 'Trimet Test', 'This is a test, ' + _get( event, 'request.intent.name' ), null, true );
+                var speachResponse = alexaHelper.buildSpeechletResponse( 'Trimet Test', 'This is a test, ' + lodash.get( event, 'request.intent.name' ), null, true );
                 var response = alexaHelper.buildResponse( {}, speachResponse );
 
                 context.succeed( response );

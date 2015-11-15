@@ -1,74 +1,38 @@
-var Q = require("q" ),
-    cacheService = require( './cache' ),
+var Promise = require( 'bluebird' ),
     trimetService = require( './trimet' ),
-    _sortBy = require( 'lodash/collection/sortBy' );
-
-init();
-
-// on instantiation populate cache
-function init() {
-    getRoutes();
-    getVehicleLocations();
-}
+    lodash = require( 'lodash' );
 
 function getRoutes() {
-    var cacheType = 'routes',
-        data = cacheService.getCache( cacheType ),
-        deferred = Q.defer();
-
-    if ( !data ) {
-        // get trimet routes from service
+    return new Promise( function( resolve, reject ) {
         trimetService.getRoutes().then( success, fail );
 
         function success( response ) {
             console.info( 'Populating cache with Trimet Routes' );
-            var cacheData = { route: _sortBy( response.resultSet.route, 'route' ) };
-
-            cacheService.setCache( cacheType, cacheData );
-            deferred.resolve( cacheData );
+            resolve( lodash.sortBy( response.resultSet.route ) );
         }
 
         function fail( reason ) {
             console.error( new Error( reason ) );
-            deferred.reject( reason );
+            reject( reason );
         }
-    } else {
-        // return routes from cache
-        console.info( 'Retrieving Trimet Routes from cache' );
-        deferred.resolve( cacheService.getCache( cacheType ) );
-    }
-
-    return deferred.promise;
+    } );
 }
 
 function getVehicleLocations() {
-    var cacheType = 'vehicleLocations',
-        data = cacheService.getCache( cacheType ),
-        deferred = Q.defer();
-
-    if ( !data ) {
+    return new Promise( function( resolve, reject ) {
         // get vehicle infomation from service
         trimetService.getVehicleLocations().then( success, fail );
 
         function success( response ) {
             console.info( 'Populating cache with Trimet Vehicle information' );
-            var cacheData = { vehicle: _sortBy( response.resultSet.vehicle, 'vehicle' ) };
-
-            cacheService.setCache( cacheType, cacheData );
-            deferred.resolve( cacheData );
+            resolve( lodash.sortBy( response.resultSet.vehicle ) );
         }
 
         function fail( reason ) {
             console.error( new Error( reason ) );
-            deferred.reject( reason );
+            reject( reason );
         }
-    } else {
-        // return vehicle infomation from cache
-        console.info( 'Retrieving Trimet Vehicle Infomation from cache' );
-        deferred.resolve( cacheService.getCache( cacheType ) );
-    }
-
-    return deferred.promise;
+    } );
 }
 
 module.exports = {

@@ -19,9 +19,9 @@
     "gulp-zip": "^3.0.2"
   },
   "dependencies": {
+    "bluebird": "^3.0.5",
     "lodash": "^3.10.1",
     "node-cache": "^3.0.0",
-    "q": "^1.4.1",
     "request": "^2.65.0"
   }
 }
